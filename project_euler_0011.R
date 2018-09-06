@@ -56,7 +56,7 @@ for (ii in 1:size_grid) {
 ## vertical
 for (ii in 1:size_grid) {
   for (jj in 1:(size_grid - (n_prod-1))){
-    prod_2 <- prod(grid_matrix[jj:(jj+n_prod-1)], ii)
+    prod_2 <- prod(grid_matrix[jj:(jj+n_prod-1), ii])
     prod_candidate <- max(prod_candidate, prod_2)
   }
 }
