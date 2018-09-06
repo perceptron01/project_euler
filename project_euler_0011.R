@@ -25,6 +25,7 @@ grid_text <- "
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48
 "
 
+# convert from string into matrix
 grid_str <- substr(grid_text, 2, nchar(grid_text)-1)
 grid_str <- str_replace_all(grid_str, '\n', ',')
 grid_str <- str_replace_all(grid_str, ' ', ',')
@@ -33,12 +34,49 @@ grid_list <- as.integer(unlist(strsplit(grid_str, ",")))
 grid_matrix <- matrix(
   grid_list
   , sqrt(length(grid_list))
-  , sqrt(length(grid_list)))
+  , sqrt(length(grid_list))
+)
 
-# horizontal
+# set parameters
+n_prod <- 4
+size_grid <- sqrt(length(grid_list))
 
-# vertical
+
+# serch max product
+prod_candidate <- 0
+
+## horizontal
+for (ii in 1:size_grid) {
+  for (jj in 1:(size_grid - (n_prod-1))){
+    prod_1 <- prod(grid_matrix[ii, jj:(jj+n_prod-1)])
+    prod_candidate <- max(prod_candidate, prod_1)
+  }
+}
+     
+## vertical
+for (ii in 1:size_grid) {
+  for (jj in 1:(size_grid - (n_prod-1))){
+    prod_2 <- prod(grid_matrix[jj:(jj+n_prod-1)], ii)
+    prod_candidate <- max(prod_candidate, prod_2)
+  }
+}
+
 # right diagonally down
+for (ii in 1:(size_grid - (n_prod-1))) {
+  for (jj in 1:(size_grid - (n_prod-1))){
+    prod_3 <- prod(diag(grid_matrix[ii:(ii+n_prod-1), jj:(jj+n_prod-1)]))
+    prod_candidate <- max(prod_candidate, prod_3)
+  }
+}
+
 # right diagonally up
+for (ii in 1:(size_grid - (n_prod-1))) {
+  for (jj in 1:(size_grid - (n_prod-1))){
+    tmp <- grid_matrix[ii:(ii+n_prod-1), jj:(jj+n_prod-1)]
+    prod_4 <- prod(diag(apply(tmp,2,rev)))
+    prod_candidate <- max(prod_candidate, prod_4)
+  }
+}
 
-
+# answer
+print(paste0("The answer is ... ", prod_candidate))
